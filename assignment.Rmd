@@ -1,0 +1,201 @@
+---
+title: "Assignment"
+author: "Ali Unlu"
+date: "7/20/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Executive Summary
+
+In this assignment, we are using the mtcars data set, to study the relationship between a car’s transmission and the number of miles per gallon of gasoline, along with a set of other variables that could affect this relationship.
+
+##### The analysis comprises of these stages:
+
+- Data Processing and Exploratory Data Analysis  
+
+- Model selection and Regression Analysis  
+
+- Residual Analysis
+
+##### The analysis is focused on answering two questions:
+
+1. Is an automatic or manual transmission better for MPG?
+
+2. Quantify the MPG difference between automatic and manual transmissions.
+
+**Conclusion:** Both models support the conclusion that the cars in the data set with manual transmissions have higher miles per gallon (MPG) than those cars in the data set with automatic transmission systems. Manual transmission delivers 2.94 more mpg than automatic transmission (using the multi-variate model). However, other variables (weight and acceleration time) do have significant influence on this correlation and further investigation and multi-variate modelling is recommended.
+
+
+## Exploratory Data Analysis
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+
+# required packages
+library(tidyverse)
+library(lessR)
+
+```
+
+
+There are 32 observations (rows) and each row is for a car type. There are 11 variables (columns) (Appendix A). 
+
+* mpg Miles/(US) gallon  
+* cyl Number of cylinders  
+* disp Displacement (cu.in.)  
+* hp Gross horsepower  
+* drat Rear axle ratio  
+* wt Weight (1000 lbs)  
+* qsec 1/4 mile time  
+* vs Engine (0 = V-shaped, 1 = straight)  
+* am Transmission (0 = automatic, 1 = manual)  
+* gear Number of forward gears  
+* carb Number of carburetors  
+
+Since am is a factor variable, we need to modify the numeric value to categorical one. Then we will check out how the distribution of fuel consumption (mpg) varies by transmission types (am) in ggplot. 
+
+
+
+```{r echo=TRUE}
+# data
+data("mtcars")
+
+# data preparation
+mtcars$am <- as.factor(mtcars$am) # make "am" a factor variable
+levels(mtcars$am) <- c("Automatic", "Manual")
+
+
+```
+
+As seen from the graph (Appendix B), vehicles with manual transmission have a higher mpg than automatic transmission. Since our sample size is too small (32 observations), we can carry out t-test to test the significance of the relationship. 
+
+```{r echo=TRUE}
+
+# T test the difference between transmissions in terms of MPG
+t.test<- t.test(mpg~am,data=mtcars); t.test$p.value
+```
+
+The t-test is for the null hypothesis “there is no correlation between transmission type and mpg”.   
+Nevertheless, the p-value (0.001373638) is less than 0.05, which indicates that the null hypothesis is rejected. The alternative hypothesis - a significant difference (correlation) of mpg between automatic and manual transmissions is now examined.
+
+## Model Building
+
+While we know there is a difference between transmission types in terms of fuel consumption, we do not know what are the best predictors of MPG. To identify the best fit, we first include all variables in our dataset and then we will conduct model building analysis with step() function.   
+
+The aim of the function is to identify lowest AIC scores in given model. While there are different ways of applying step() function (forward, backward, both), the basic difference is that in the backward selection procedure you can only discard variables from the model at any step, whereas in stepwise selection you can also add variables to the model.
+
+```{r echo=TRUE}
+# linear model including all variables
+model = lm(mpg ~ ., data = mtcars)
+
+
+```
+
+As we can see from the appendix C, the AIC of the model decreases every time we remove a suggested variable. The Backward Elimination Procedure stops when there are no more variables to remove ( AIC = 61.31). And removing one more variable would result in a higher AIC.
+
+
+## Regression Analysis
+
+We will use lessR package to conduct regression analysis. The standard output (Appendix D) provides extensive summary, including estimated model, fit indices, ANOVA, correlation matrix, collinearity analysis, best subset regression, residuals and influence statistics, and prediction intervals.  
+
+```{r echo=TRUE}
+
+# converting data into LessR
+d <- mtcars
+
+r <- reg(mpg ~ wt + qsec + am)
+
+
+```
+
+
+Here just display the estimates as part of the standard text output.
+
+```{r echo=TRUE}
+r$out_estimates
+
+```
+
+
+## Model results 
+
+* According to the R-squared value, our best model fit explains 85% of the variability in MPG outcome with the regressors weight (wt), 1/4 mile time (qsec), and transmission (am).  
+
+* The Adjusted R-squared is 83%, which is close to the R-squared value. This means that if we had unnecessary variables in our model, the difference between this two would be substantial.  
+
+* We can see that all the p-values of the coefficients are smaller than 0.05 of significance. Which means that all the regressors are statistically significant, except the intercept.  
+
+* The previous statement can be reinforced by the confidence intervals of the coefficients by not containing 0. Hence, these control variables have a statistically significant effect on the outcome.  
+
+* The model as a whole is significant to explain the MPG outcome, as the P-value for the regression is 0.000, which is smaller than the significance level 0.05.  
+
+* When the transmission am variable is 0 (automatic), the intercept of the model is 9.618 (coefficient of the reference variable). But when is equal to 1 (manual) the intercept of the model is 9.618 + 2.936 (coefficient of the reference variable + the coefficient of the manual transmission variable).  
+
+* The t-test for the transmission am variable when is equal to 1 (manual), suggests that this variable is significantly different compared to when is equal to cero (automatic). We can then say that manual transmission has on average 30.53% (2.936 units) more miles per gallon compared to automatic transmission.  
+
+* Holding 1/4 mile time qsec and Transmission am constant, as the weight of the car increases by 1 unit (1000 lbs), the miles per gallon, on an average, decreases by -3.917 miles per gallon.  
+
+* Holding Weight wt and Transmission am constant, as the 1/4 mile time increases by 1 unit (1 second), the miles per gallon, on an average, increases by 1.226 miles per gallon.
+
+
+## Residual Analysis
+
+* The points in the Residuals vs. Fitted plot (Plot 2) seem to be randomly scattered, verifying the assumption of the homoscedasticity of errors. 
+
+* Distribution of Residuals (Plot 1) is also in normal
+
+* As seen in the Residuals and Influence table (Appendix D), all the Cook’s distances are less than 1, D<1. This means that our observations are not highly influential. 
+
+
+## Conclusion
+
+* Q1 - Manual transmission delivers a significantly higher mpg than automatic. Manual transmission is therefore ‘better’ in terms of mpg.  
+
+* Q2 - Manual transmission delivers 2.94 more mpg than automatic transmission (using the multi-variate model). This has an adjusted r squared of 0.83 and a p-value below 0.05.  
+
+It may be possible to improve on this with a further multi-variate model that also includes interactions between the variables using qsec (acceleration) and weight (wt). (However, the limits of report length (around 2 pages) and appendices (around 3 pages) for this assignment mean that this additional investigation is not included.)
+
+### Appendix A  (Exploratory Data Analysis)
+
+
+```{r echo=TRUE}
+
+
+# head of the data
+ head(mtcars)
+# dimension
+dim(mtcars)
+````
+
+
+### Appendix B - Violin Plot
+
+```{r echo=TRUE}
+
+# explanatory graph 
+g <- ggplot(mtcars, aes(am, mpg))
+g + geom_violin(aes(fill = am)) + geom_jitter(height = 0)
+
+
+```
+
+### Appendix C Model Building
+
+```{r echo=TRUE}
+
+# Running the Backward Elimination Procedure
+final_model <- step(model, direction = "backward")
+
+
+```
+
+### Appendix D - Regression Analysis
+
+```{r echo=TRUE}
+r
+```
+
