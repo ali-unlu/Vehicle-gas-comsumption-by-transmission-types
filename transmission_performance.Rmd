@@ -1,9 +1,10 @@
 ---
-title: "Assignment"
-author: "Ali Unlu"
-date: "7/20/2021"
-output: pdf_document
+output: 
+  html_document: 
+    keep_md: yes
 ---
+
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -11,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Executive Summary
 
-In this assignment, we are using the mtcars data set, to study the relationship between a car’s transmission and the number of miles per gallon of gasoline, along with a set of other variables that could affect this relationship.
+In this project, I am using the mtcars data set, to study the relationship between a car’s transmission and the number of miles per gallon of gasoline, along with a set of other variables that could affect this relationship.
 
 ##### The analysis comprises of these stages:
 
@@ -77,6 +78,7 @@ As seen from the graph (Appendix B), vehicles with manual transmission have a hi
 
 # T test the difference between transmissions in terms of MPG
 t.test<- t.test(mpg~am,data=mtcars); t.test$p.value
+
 ```
 
 The t-test is for the null hypothesis “there is no correlation between transmission type and mpg”.   
@@ -100,7 +102,7 @@ As we can see from the appendix C, the AIC of the model decreases every time we 
 
 ## Regression Analysis
 
-We will use lessR package to conduct regression analysis. The standard output (Appendix D) provides extensive summary, including estimated model, fit indices, ANOVA, correlation matrix, collinearity analysis, best subset regression, residuals and influence statistics, and prediction intervals.  
+We will use lessR package to conduct regression analysis. The standard output (Appendix D) provides extensive summary, including estimated model, fit indices, ANOVA, correlation matrix, collinarity analysis, best subset regression, residuals and influence statistics, and prediction intervals.  
 
 ```{r echo=TRUE}
 
@@ -169,7 +171,7 @@ It may be possible to improve on this with a further multi-variate model that al
  head(mtcars)
 # dimension
 dim(mtcars)
-````
+```
 
 
 ### Appendix B - Violin Plot

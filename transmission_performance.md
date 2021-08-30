@@ -1,7 +1,4 @@
 ---
-title: "Assignment"
-author: "Ali Unlu"
-date: "7/20/2021"
 output: 
   html_document: 
     keep_md: yes
@@ -9,9 +6,11 @@ output:
 
 
 
+
+
 # Executive Summary
 
-In this assignment, we are using the mtcars data set, to study the relationship between a car’s transmission and the number of miles per gallon of gasoline, along with a set of other variables that could affect this relationship.
+In this project, I am using the mtcars data set, to study the relationship between a car’s transmission and the number of miles per gallon of gasoline, along with a set of other variables that could affect this relationship.
 
 ##### The analysis comprises of these stages:
 
@@ -96,7 +95,7 @@ As we can see from the appendix C, the AIC of the model decreases every time we 
 
 ## Regression Analysis
 
-We will use lessR package to conduct regression analysis. The standard output (Appendix D) provides extensive summary, including estimated model, fit indices, ANOVA, correlation matrix, collinearity analysis, best subset regression, residuals and influence statistics, and prediction intervals.  
+We will use lessR package to conduct regression analysis. The standard output (Appendix D) provides extensive summary, including estimated model, fit indices, ANOVA, correlation matrix, collinarity analysis, best subset regression, residuals and influence statistics, and prediction intervals.  
 
 
 ```r
@@ -106,7 +105,7 @@ d <- mtcars
 r <- reg(mpg ~ wt + qsec + am)
 ```
 
-![](assignment_files/figure-html/unnamed-chunk-5-1.png)<!-- -->![](assignment_files/figure-html/unnamed-chunk-5-2.png)<!-- -->
+![](transmission_performance_files/figure-html/unnamed-chunk-5-1.png)<!-- -->![](transmission_performance_files/figure-html/unnamed-chunk-5-2.png)<!-- -->
 
 
 Here just display the estimates as part of the standard text output.
@@ -201,7 +200,7 @@ g <- ggplot(mtcars, aes(am, mpg))
 g + geom_violin(aes(fill = am)) + geom_jitter(height = 0)
 ```
 
-![](assignment_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+![](transmission_performance_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
 ### Appendix C Model Building
 
