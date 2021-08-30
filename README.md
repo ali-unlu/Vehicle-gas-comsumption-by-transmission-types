@@ -1,4 +1,4 @@
-# Vehicle-gas-consumption-by-transmission-types
+# Vehicle gas consumption by transmission types
 
 # Executive Summary
 
